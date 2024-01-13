@@ -14,3 +14,10 @@ _Week 1:_
     Would it be better if all of above were in one app?
 
     In other words, I'm making a poll which will show how my product wiil be used and will it be used at all?
+  TOTAL HOURS: 8
+
+
+  _Week 2:_
+- Created the Discord Poll
+- Created proposal to the tech office
+  TOTAL HOURS: 3
