@@ -16,7 +16,7 @@ _Week 1:_
     In other words, I'm making a poll which will show how my product wiil be used and will it be used at all?
   TOTAL HOURS: 8
 
-  _Week 2:_
+_Week 2:_
 - **Created and conducted the Discord Poll**
   In total got 47 responses, inlcuding both faculty and students.
   - Almost half (22 - 46.8%) of the survey respondents answered that they do not use Discord. Among those who use it (25 - 53.2%), almost half (21 - 44.7%) use      Discord exclusively for gaming, 18 people (38.3%) for communication, and 4 for various purposes (8.4%).
