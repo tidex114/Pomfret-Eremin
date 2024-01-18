@@ -14,7 +14,7 @@ _Week 1:_
     Would it be better if all of above were in one app?
 
     In other words, I'm making a poll which will show how my product wiil be used and will it be used at all?
-  TOTAL HOURS: 8
+**TOTAL HOURS: 8**
 
 _Week 2:_
 - **Created and conducted the Discord Poll**
@@ -27,4 +27,4 @@ _Week 2:_
   -   Now, the sign-up message shows current count of participants and room left. Count updates by editing message on button.interaction (when user presses the button)
   -   All the sign-ups are now stored in a google sheet "trip list". It's needed due to discordpy not saving any info about what has been done during the running proccess. During the bot's initialisation all Views (buttons pinned to messages) are added to the queue and info about trips is being loaded to each sign-up message. Also, the current count is stored and updated in the google sheet
 
-  **TOTAL HOURS: 5**
+**TOTAL HOURS: 5**
