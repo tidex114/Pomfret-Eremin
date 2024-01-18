@@ -24,6 +24,6 @@ _Week 1:_
   -   The majority of respondents (41 - 87.2%) believe that the sign-up system can be improved by adding live statistics and automating the entire process.
 - **Created proposal to the tech office**
 - **Added live stats to the sign-up system**
-- Now, the sign-up message shows current count of participants and room left.
+  Now, the sign-up message shows current count of participants and room left.
   It updates on count change
 TOTAL HOURS: 5
