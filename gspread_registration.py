@@ -6,7 +6,7 @@ sh = sa.open("user_data")
 
 def registrate(user_id: int):
     wks = sh.worksheet("user list")
-    for i in range(1 + 1, wks.row_count + 1):
+    for i in range(2, wks.row_count + 1):
         if int(wks.cell(i, 1).value) == user_id:
             f_name = wks.cell(i, 2).value
             l_name = wks.cell(i, 3).value

@@ -35,10 +35,10 @@ async def on_ready():
     print(cyan + f"Bot {bot.user.name} is ready for use!")
     debugging_channel = bot.get_channel(config.DEBUGGING_CHANNEL_ID)
 
-    trips, dates, times, atendees, wl, wks_ids = gspread_signup.get_signups()
+    trips, dates, times, atendees, wl, wks_ids, counts = gspread_signup.get_signups()
 
     for i in range(len(trips)):
-        bot.add_view(SignUpButtons(trips[i], dates[i], times[i], atendees[i], wl[i]))
+        bot.add_view(SignUpButtons(trips[i], dates[i], times[i], atendees[i], wl[i], int(counts[i])))
     bot.add_view(RegisterButton())
     bot.add_view(CanvasNotificationButtons())
     await debugging_channel.send("Bot is started and online!")
@@ -99,10 +99,11 @@ class CanvasNotificationButtons(discord.ui.View):
         username = interaction.user.nick.split()
         canvas_notifications.enable_ntf(username[0], username[1])
 
-
     @discord.ui.button(label="Disable", style=discord.ButtonStyle.gray, custom_id="disableBtn")
     async def disableCanvaNotification(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("Disabled", ephemeral=True)
+        username = interaction.user.nick.split()
+        await interaction.response.send_message(canvas_notifications.disable_ntf(username[0], username[1]),
+                                                ephemeral=True)
 
 
 @bot.command()
@@ -204,9 +205,9 @@ class SignupModal(discord.ui.Modal, title='New sign-up'):
         gspread_signup.newsignup(str(self.name_input), str(self.date_input), str(self.time_input),
                                  int(str(self.max_attendees_input)), bool(self.waitlist_input))
         channel = bot.get_channel(config.SIGN_UPS_ID)
-        await channel.send(embed=embed,
+        await channel.send(f"***Current count:*** 0/{self.max_attendees_input}", embed=embed,
                            view=SignUpButtons(str(self.name_input), str(self.date_input), str(self.time_input),
-                                              int(str(self.max_attendees_input)), bool(self.waitlist_input)))
+                                              int(str(self.max_attendees_input)), bool(self.waitlist_input), 0))
         await interaction.response.send_message("Sign-up created!", ephemeral=True)
 
 
@@ -219,13 +220,14 @@ async def signup(interaction: discord.Interaction):
 
 
 class SignUpButtons(discord.ui.View):
-    def __init__(self, event_name, event_date, event_time, max_attendees, waitlist_enabled):
+    def __init__(self, event_name, event_date, event_time, max_attendees, waitlist_enabled, count):
         super().__init__(timeout=None)  # timeout of the view must be set to None
         self.event_name = event_name
         self.event_date = event_date
         self.event_time = event_time
         self.max_attendees = max_attendees
         self.waitlist_enabled = waitlist_enabled
+        self.count = count
 
     @discord.ui.button(label="+", style=discord.ButtonStyle.green, custom_id="+btn")
     async def greenBtn(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -234,6 +236,10 @@ class SignUpButtons(discord.ui.View):
         eph_msg = gspread_signup.adduser(nickname[0], nickname[1], int(nickname[2][:-1]), self.event_name,
                                          int(self.max_attendees),
                                          self.waitlist_enabled)
+        if eph_msg == "You were added to the list!":
+            gspread_signup.change_count(self.event_name, 1)
+            self.count += 1
+            await interaction.message.edit(content=f"***Current count:*** {self.count}/{self.max_attendees}")
 
         await interaction.response.send_message(eph_msg, ephemeral=True)
 
@@ -242,7 +248,10 @@ class SignUpButtons(discord.ui.View):
         nickname = interaction.user.display_name.split()
         eph_msg = gspread_signup.removeuser(nickname[0], nickname[1], self.event_name,
                                             int(self.max_attendees))
-
+        if eph_msg == "You were removed from the list!":
+            gspread_signup.change_count(self.event_name, 0)
+            self.count -= 1
+            await interaction.message.edit(content=f"***Current count:*** {self.count}/{self.max_attendees}")
         await interaction.response.send_message(eph_msg, ephemeral=True)
 
     @discord.ui.button(label="End sign-up", style=discord.ButtonStyle.gray, custom_id="end_btn")

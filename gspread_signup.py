@@ -15,6 +15,7 @@ def newsignup(event_name: str, event_date: str, event_time: str, max_atendees: i
         wks.update_cell(wks.row_count, 4, max_atendees)
         wks.update_cell(wks.row_count, 5, waitlist)
         wks.update_cell(wks.row_count, 6, str(sh.worksheet(event_name).id))
+        wks.update_cell(wks.row_count, 7, 0)
     else:
         return "trip already exists"
 
@@ -85,10 +86,29 @@ def get_signups():
     atendees = wks.col_values(4)[1:]
     wl = wks.col_values(5)[1:]
     wks_ids = wks.col_values(6)[1:]
-    return tripnames, dates, times, atendees, wl, wks_ids
+    counts = wks.col_values(7)[1:]
+    return tripnames, dates, times, atendees, wl, wks_ids, counts
 
 
 def removesignup(name: str):
     wks = sh.worksheet(name)
     sh.del_worksheet(wks)
+    wks = sh.worksheet("trip list")
+    for i in range(2, wks.row_count + 1):
+        if str(wks.cell(i, 1).value) == name:
+            wks.delete_row(i)
+            break
+
+
+def change_count(name: str, pm: int):
+    wks = sh.worksheet("trip list")
+    for i in range(2, wks.row_count + 1):
+        if str(wks.cell(i, 1).value) == name:
+            count = int(wks.cell(i, 7).value)
+            if pm == 1:
+                wks.update_cell(i, 7, count + 1)
+                break
+            elif pm == 0:
+                wks.update_cell(i, 7, count - 1)
+                break
 
