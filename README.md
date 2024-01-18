@@ -24,6 +24,7 @@ _Week 2:_
   -   The majority of respondents (41 - 87.2%) believe that the sign-up system can be improved by adding live statistics and automating the entire process.
 - **Created proposal to the tech office**
 - **Added live stats to the sign-up system**
-  Now, the sign-up message shows current count of participants and room left.
-  It updates on count change
-TOTAL HOURS: 5
+  Now, the sign-up message shows current count of participants and room left. Count updates by editing message on button.interaction (when user presses the button)
+  All the sign-ups are now stored in a google sheet "trip list". It's needed due to discordpy not saving any info about what has been done during the running proccess. During the bot's initialisation all Views (buttons pinned to messages) are added to the queue and info about trips is being loaded to each sign-up message. Also, the current count is stored and updated in the google sheet
+
+  **TOTAL HOURS: 5**
