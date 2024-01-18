@@ -16,8 +16,14 @@ _Week 1:_
     In other words, I'm making a poll which will show how my product wiil be used and will it be used at all?
   TOTAL HOURS: 8
 
-
   _Week 2:_
-- Created the Discord Poll
-- Created proposal to the tech office
-  TOTAL HOURS: 3
+- **Created and conducted the Discord Poll**
+  In total got 47 responses, inlcuding both faculty and students.
+  -     Almost half (22 - 46.8%) of the survey respondents answered that they do not use Discord. Among those who use it (25 - 53.2%), almost half (21 - 44.7%) use      Discord exclusively for gaming, 18 people (38.3%) for communication, and 4 for various purposes (8.4%).
+  -   Overall, the school community assesses the benefit of Discord for its cohesion on a five-point scale at 3.
+  -   The majority of respondents (41 - 87.2%) believe that the sign-up system can be improved by adding live statistics and automating the entire process.
+- **Created proposal to the tech office**
+- **Added live stats to the sign-up system**
+-     Now, the sign-up message shows current count of participants and room left.
+      It updates on count change
+TOTAL HOURS: 5
