@@ -34,10 +34,10 @@ _Week 2:_
 _Week 3:_
 - **Strated working on message filtering system**
 
-  -   _Filters done and working: _
+     _Filters done and working:_
     - _Profanity filter._ Detects profanity using ML profanity_check library. Not accurate with caveats and other forms of offensive language, but still better than just a list of bad words.
-  
-  -   _Filters in progress:_
+    
+    _Filters in progress:_
     -   _Link filter._ No links are allowed in public chats on the server
     -   _Image scanner._ Have not started working on it yet, but probably will use some sort of existing AI to check safety of the picture sent.
     
