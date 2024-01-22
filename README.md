@@ -42,6 +42,7 @@ _Week 3:_
   - Decorated and sent the Guide Lines message to the #rules channel. The result can be seen there.
   - Changed RULES_MESSAGE_ID in the config.py, so the rules acknowledgment works with another message
   - The first easter egg was created. **Go find it!**
+    
 -**Starting working on violations/punishment system**
   - /_mute_ - mutes user for customizable period of time
   - /_ban_ - kickbans user from the server
