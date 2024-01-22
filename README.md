@@ -38,12 +38,13 @@ _Week 3:_
   Filters in progress:
   -   Link filter. No links are allowed in public chats on the server
   -   Image scanner. Have not started working on it yet, but probably will use some sort of existing AI to check safety of the picture sent.
+    
 - **Created Guide Lines list**
   - Decorated and sent the Guide Lines message to the #rules channel. The result can be seen there.
   - Changed RULES_MESSAGE_ID in the config.py, so the rules acknowledgment works with another message
   - The first easter egg was created. **Go find it!**
     
--**Starting working on violations/punishment system**
+- **Starting working on violations/punishment system**
   - /_mute_ - mutes user for customizable period of time
   - /_ban_ - kickbans user from the server
   - /_warns_ - gives a warning to the user. If 3 accumulated, user gets muted or kickbanned.
