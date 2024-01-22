@@ -6,7 +6,7 @@ import traceback
 import colorama
 import config
 import tracemalloc
-import asyncio
+import filters
 
 # importing discord.py libraries to work with discord's API
 # importing colorama to change console's text color to make debugging more comfortable
@@ -50,6 +50,13 @@ async def on_message(message):
     print(yellow + f'{message.author} ' + cyan + "said: " + yellow + f"'{message.content}'")
     await bot.process_commands(message)
     channel = message.channel
+    if filters.profanity_filter([str(message.content)]):
+        await message.delete()
+        dm_channel = await message.author.create_dm()
+        await dm_channel.send(
+            "Hello there, it seems that you used a profane word in your previous message. "
+            "Please be mindful of our community guidelines, which prohibit the use of offensive language."
+            " Let's keep our conversation respectful and constructive. Thank you!")
 
 
 # decorator which reacts on any reactions added to already existing on all messages
@@ -108,10 +115,16 @@ class CanvasNotificationButtons(discord.ui.View):
 
 @bot.command()
 async def send(ctx):
-    embed = discord.Embed(title="Canvas Notifications",
-                          description=f"If you enable these notifications, Griffy will send you personal "
-                                      f"notifications about your grades, homework and upcoming assignments.")
-    await ctx.send(embed=embed, view=CanvasNotificationButtons())
+    embed = discord.Embed(
+        title="Rules Acknowledgement",
+        description=(
+            "If you have read the rules above and undertake to comply with them and want to proceed to the server, "
+            "please react to this message with a ✅."),
+        color=0x690E8
+    )
+
+    message = await ctx.send(embed=embed)
+    await message.add_reaction("✅")
 
 
 class RegistrationModal(discord.ui.Modal, title='Registration'):
