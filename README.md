@@ -29,3 +29,23 @@ _Week 2:_
   -   All the sign-ups are now stored in a google sheet "trip list". It's needed due to discordpy not saving any info about what has been done during the running proccess. During the bot's initialisation all Views (buttons pinned to messages) are added to the queue and info about trips is being loaded to each sign-up message. Also, the current count is stored and updated in the google sheet
 
 **TOTAL HOURS: 5**
+
+
+_Week 3:_
+-**Strated working on message filtering system**
+  Filters done and working: 
+  -Profanity filter. Detects profanity using ML profanity_check library. Not accurate with caveats and other forms of offensive language, but still better than just a list of bad words.
+  Filters in progress:
+  -   Link filter. No links are allowed in public chats on the server
+  -   Image scanner. Have not started working on it yet, but probably will use some sort of existing AI to check safety of the picture sent.
+- **Created Guide Lines list**
+  - Decorated and sent the Guide Lines message to the #rules channel. The result can be seen there.
+  - Changed RULES_MESSAGE_ID in the config.py, so the rules acknowledgment works with another message
+  - The first easter egg was created. **Go find it!**
+-**Starting working on violations/punishment system**
+  - /_mute_ - mutes user for customizable period of time
+  - /_ban_ - kickbans user from the server
+  - /_warns_ - gives a warning to the user. If 3 accumulated, user gets muted or kickbanned.
+  - **All of above can be used only by authorized faculty and/or server moderators ONLY if user has violated server's guidelines**
+
+**TOTAL HOURS: 4**
