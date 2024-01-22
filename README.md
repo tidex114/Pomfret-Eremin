@@ -53,4 +53,5 @@ _Week 3:_
   - **All of above can be used only by authorized faculty and/or server moderators ONLY if user has violated server's guidelines**
 
 **BIG PLAN:** Move all googlesheets to a SQL database to reach better security
+
 **TOTAL HOURS: 4**
