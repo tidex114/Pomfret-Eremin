@@ -32,7 +32,7 @@ _Week 2:_
 
 
 _Week 3:_
--**Strated working on message filtering system**
+- **Strated working on message filtering system**
   Filters done and working: 
   -Profanity filter. Detects profanity using ML profanity_check library. Not accurate with caveats and other forms of offensive language, but still better than just a list of bad words.
   Filters in progress:
