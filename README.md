@@ -47,11 +47,24 @@ _Week 3:_
   - The first easter egg was created. **Go find it!**
     
 - **Starting working on violations/punishment system**
-  - /_mute_ - mutes user for customizable period of time
+  - /_timeout_ - mutes user for customizable period of time
   - /_ban_ - kickbans user from the server
-  - /_warns_ - gives a warning to the user. If 3 accumulated, user gets muted or kickbanned.
+  - /_warn_ - gives a warning to the user. If 3 accumulated, user gets muted or kickbanned.
   - **All of above can be used only by authorized faculty and/or server moderators ONLY if user has violated server's guidelines**
 
 **BIG PLAN:** Move all googlesheets to a SQL database to reach better security
 
 **TOTAL HOURS: 4**
+
+
+_Week 4:_
+- **Created feedback system**
+  - _Report user or bug:_
+      Now, anyone can report a user or a bug in the #feedback channel. On the button interaction a form pops up and after being filled in, a message is sent to the _#user-reports_ or _#bug-reports_ channel. Any faculty members and moderators can access these and solve the problem   
+
+- **Working on /warn command**
+  - If a user has violated a rule, a warn can be made. That command can be used by any faculty member or moderator. On each warning user gets a formal direct message from Griffy that he got a warning and may have disciplinary consequences. If 3 accumulated, user gets muted on the server and has to wait until a moderator contacts him or he can contact the moderator by himself.
+  - By far, most of the code is finished but as it's a _tree command__, it will take some time to sync with discord so I haven't tested it yet.
+ 
+**TOTAL HOURS: 4.5**
+  **TOTAL HOURS: **
