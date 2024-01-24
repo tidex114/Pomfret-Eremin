@@ -67,4 +67,3 @@ _Week 4:_
   - By far, most of the code is finished but as it's a _tree command__, it will take some time to sync with discord so I haven't tested it yet.
  
 **TOTAL HOURS: 4.5**
-  **TOTAL HOURS: **
