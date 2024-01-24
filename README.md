@@ -66,4 +66,6 @@ _Week 4:_
   - If a user has violated a rule, a warn can be made. That command can be used by any faculty member or moderator. On each warning user gets a formal direct message from Griffy that he got a warning and may have disciplinary consequences. If 3 accumulated, user gets muted on the server and has to wait until a moderator contacts him or he can contact the moderator by himself.
   - By far, most of the code is finished but as it's a _tree command__, it will take some time to sync with discord so I haven't tested it yet.
  
+**I strongly recommend to look up the changes made on the server!**
+ 
 **TOTAL HOURS: 4.5**
