@@ -51,13 +51,29 @@ async def on_message(message):
     print(yellow + f'{message.author} ' + cyan + "said: " + yellow + f"'{message.content}'")
     await bot.process_commands(message)
     channel = message.channel
-    if filters.profanity_filter([str(message.content)]):
+    if filters.profanity_filter([str(message.content)]) == 1:
         await message.delete()
         dm_channel = await message.author.create_dm()
         await dm_channel.send(
             "Hello there, it seems that you used a profane word in your previous message. "
             "Please be mindful of our community guidelines, which prohibit the use of offensive language."
             " Let's keep our conversation respectful and constructive. Thank you!")
+
+    elif filters.url_filter(str(message.content)) == 1:
+        allowed_roles = ["Administrator", "Bot", "Test Bot", "Faculty", "Developer"]
+        roles = message.author.roles
+        ifRole = False
+        for role in roles:
+            if str(role.name) in allowed_roles:
+                ifRole = True
+                break
+        if not ifRole:
+            await message.delete()
+            dm_channel = await message.author.create_dm()
+            await dm_channel.send(
+                "Hello there, it's an automated message from Griffy. It appears that you shared a link in your previous message. Please remember our community guidelines, "
+                "which emphasize caution against sharing or clicking on unverified links. This helps protect our community from potential security risks or misinformation. "
+                "Let's continue to ensure a safe and trustworthy environment for our conversation. Thank you for your understanding!")
 
 
 # decorator which reacts on any reactions added to already existing on all messages
@@ -192,6 +208,7 @@ async def warn(interaction: discord.Interaction, username: str):
         await dm_channel.send(embed=embed)
     elif code == -1:
         await interaction.response.send_message("Something went wrong...", ephemeral=True)
+
 
 def check_required_args(ctx):
     return len(ctx.message.content.split()) != 6
