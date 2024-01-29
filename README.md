@@ -67,5 +67,8 @@ _Week 4:_
   - By far, most of the code is finished but as it's a _tree command__, it will take some time to sync with discord so I haven't tested it yet.
  
 **I strongly recommend to look up the changes made on the server!**
+
+- **Now /warn "username" works**
+  - After a long troubleshooting, /warn now works. On each new warning user gets a formal text direct message from Griffy notificating him about the infraction.    
  
-**TOTAL HOURS: 4.5**
+**TOTAL HOURS: 7**
