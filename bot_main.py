@@ -1,4 +1,4 @@
-import gspread_signup, gspread_registration, canvas_notifications
+import gspread_signup, gspread_registration
 import gspread
 import discord
 from discord.ext import commands
@@ -7,6 +7,7 @@ import colorama
 import config
 import tracemalloc
 import filters
+import gspread_user_management
 
 # importing discord.py libraries to work with discord's API
 # importing colorama to change console's text color to make debugging more comfortable
@@ -40,7 +41,7 @@ async def on_ready():
     for i in range(len(trips)):
         bot.add_view(SignUpButtons(trips[i], dates[i], times[i], atendees[i], wl[i], int(counts[i])))
     bot.add_view(RegisterButton())
-    bot.add_view(CanvasNotificationButtons())
+    bot.add_view(ReportView())
     await debugging_channel.send("Bot is started and online!")
 
 
@@ -96,35 +97,110 @@ async def online(ctx):
         await ctx.send('No members are currently online.')
 
 
-class CanvasNotificationButtons(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=None)
-
-    @discord.ui.button(label="Enable", style=discord.ButtonStyle.blurple, custom_id="enableBtn")
-    async def enableCanvaNotification(self, interaction: discord.Interaction, button: discord.ui.Button):
-        await interaction.response.send_message("Enabled", ephemeral=True)
-        username = interaction.user.nick.split()
-        canvas_notifications.enable_ntf(username[0], username[1])
-
-    @discord.ui.button(label="Disable", style=discord.ButtonStyle.gray, custom_id="disableBtn")
-    async def disableCanvaNotification(self, interaction: discord.Interaction, button: discord.ui.Button):
-        username = interaction.user.nick.split()
-        await interaction.response.send_message(canvas_notifications.disable_ntf(username[0], username[1]),
-                                                ephemeral=True)
-
-
 @bot.command()
 async def send(ctx):
     embed = discord.Embed(
-        title="Rules Acknowledgement",
-        description=(
-            "If you have read the rules above and undertake to comply with them and want to proceed to the server, "
-            "please react to this message with a ✅."),
-        color=0x690E8
+        title="Need Help?",
+        description="If something does not work or someone misbehaves, feel free to reach out to any moderators or faculty members.",
+        color=discord.Color.blue()
     )
+    embed.add_field(name="Moderator", value="You can contact @tidex114 for assistance.")
 
-    message = await ctx.send(embed=embed)
-    await message.add_reaction("✅")
+    report_reasons = ["Spamming", "Harassment", "Rule Violation", "Other"]  # Add or modify reasons as needed
+    view = ReportView()
+    await ctx.send(embed=embed, view=view)
+
+
+@bot.tree.command(description="Create a new sign-up!")
+async def signup(interaction: discord.Interaction):
+    if interaction.channel.id == config.SIGN_UPS_ID:
+        await interaction.response.send_modal(SignupModal())
+    else:
+        await interaction.response.send_message(content="Can't be used in this channel!", ephemeral=True)
+
+
+@bot.tree.command(description="Gives a warning to user: /warn [discord username]")
+async def warn(interaction: discord.Interaction, username: str):
+    print(username)
+    guild = bot.get_guild(config.GUILD_ID)
+    user = discord.utils.find(lambda m: m.name == username, guild.members)
+    if user:
+        nick = user.display_name.split()
+
+    else:
+        await interaction.response.send_message("No user found...", ephemeral=True)
+
+    code = gspread_user_management.warn(nick)
+    print(code)
+    if code == 1:
+        await interaction.response.send_message("User warned! (1/3)", ephemeral=True)
+        dm_channel = await user.create_dm()
+        embed = discord.Embed(title="🔔 First Warning Notice from {}".format("Pomfret School"),
+                              color=discord.Color.orange())
+
+        embed.add_field(name="Hello {}".format(user.name),
+                        value=("This is an official notice that you have received your first warning "
+                               "on the {} Discord server. Your recent behavior/actions have been found "
+                               "to be in violation of our community guidelines.\n\n"
+                               "We value your participation in our community, but it is important to maintain "
+                               "a respectful and safe environment for all members. Please take a moment to review "
+                               "our server rules to avoid any future infractions.\n\n"
+                               "If you have any questions or believe this warning was made in error, feel free "
+                               "to reach out to the moderation team.\n\n"
+                               "Thank you for your understanding and cooperation.").format("Pomfret School"),
+                        inline=False)
+        await dm_channel.send(embed=embed)
+    elif code == 2:
+        await interaction.response.send_message("User warned! (2/3)", ephemeral=True)
+        dm_channel = await user.create_dm()
+        embed = discord.Embed(title="🚨 Second Warning Notice from {}".format("Pomfret School"),
+                              color=discord.Color.red())
+
+        embed.add_field(name="Hello {}".format(username),
+                        value=("This message serves as your second warning on the {} Discord server. "
+                               "It appears that there has been another incident following your first warning, "
+                               "indicating a continued violation of our community guidelines.\n\n"
+                               "Please understand that maintaining a positive and respectful environment is crucial "
+                               "for our community. As this is your second warning, we urge you to seriously reconsider "
+                               "your actions and adhere to the server rules.\n\n"
+                               "Repeated violations may result in further action, including temporary muting. "
+                               "If you have any concerns or wish to discuss this matter, please don't hesitate to contact "
+                               "the moderation team.\n\n"
+                               "We appreciate your attention to this matter.").format("Pomfret School"),
+                        inline=False)
+        await dm_channel.send(embed=embed)
+    elif code == 3:
+        await interaction.response.send_message("User warned! (3/3). User is now muted on the server.", ephemeral=True)
+        dm_channel = await user.create_dm()
+        embed = discord.Embed(title="⛔ Final Warning and Muting Notice from {}".format("Pomfret School"),
+                              color=discord.Color.dark_red())
+
+        embed.add_field(name="Hello {}".format(username),
+                        value=(
+                            "We are contacting you to inform you that you have received your third and final warning "
+                            "on the {} Discord server. Due to repeated violations of our community guidelines despite "
+                            "prior warnings, we have decided to temporarily mute your account. During this time, you will "
+                            "not be able to participate in any interactions within the server.\n\n"
+                            "This mute is necessary to uphold the integrity and safety of our community. A member of our "
+                            "moderation team, tidex114, will be in contact with you to discuss this situation and the terms "
+                            "for lifting the mute.\n\n"
+                            "If you wish to appeal this decision or discuss your behavior, please feel free to reach out "
+                            "directly to tidex114 or any other member of our moderation team.\n\n"
+                            "We hope to resolve this matter positively and look forward to your understanding and cooperation.").format(
+                            "Pomfret School"),
+                        inline=False)
+        await dm_channel.send(embed=embed)
+    elif code == -1:
+        await interaction.response.send_message("Something went wrong...", ephemeral=True)
+
+def check_required_args(ctx):
+    return len(ctx.message.content.split()) != 6
+
+
+@bot.command()
+async def sync(ctx: commands.Context) -> None:
+    synced = await bot.tree.sync()
+    await ctx.reply("Synced {} commands".format(len(synced)))
 
 
 class RegistrationModal(discord.ui.Modal, title='Registration'):
@@ -224,14 +300,6 @@ class SignupModal(discord.ui.Modal, title='New sign-up'):
         await interaction.response.send_message("Sign-up created!", ephemeral=True)
 
 
-@bot.tree.command(description="Create a new sign-up!")
-async def signup(interaction: discord.Interaction):
-    if interaction.channel.id == config.SIGN_UPS_ID:
-        await interaction.response.send_modal(SignupModal())
-    else:
-        await interaction.response.send_message(content="Can't be used in this channel!", ephemeral=True)
-
-
 class SignUpButtons(discord.ui.View):
     def __init__(self, event_name, event_date, event_time, max_attendees, waitlist_enabled, count):
         super().__init__(timeout=None)  # timeout of the view must be set to None
@@ -278,14 +346,85 @@ class SignUpButtons(discord.ui.View):
             await interaction.response.send_message("Not permitted!", ephemeral=True)
 
 
-def check_required_args(ctx):
-    return len(ctx.message.content.split()) != 6
+class BugReportModal(discord.ui.Modal, title="Report a Bug"):
+    bug_channel = discord.ui.TextInput(
+        label="In which channel that happened?",
+        placeholder='channel name',
+        required=True,
+        style=discord.TextStyle.short,
+        max_length=20
+    )
+    description = discord.ui.TextInput(
+        label="What happened?",
+        placeholder="describe what didn't work",
+        required=True,
+        style=discord.TextStyle.long,
+        max_length=250
+    )
+
+    async def on_submit(self, interaction: discord.Interaction):
+        channel = await bot.fetch_channel(config.BUG_REPORT_CHANNEL_ID)
+        embed = discord.Embed(
+            title=f"***🐛 Bug Report***",
+            description="A new Bug was found!",
+            color=discord.Color.blue()
+        )
+        embed.add_field(name="**Where the Bug has occurred:**", value=f"```{str(self.bug_channel)}```",
+                        inline=False)
+        embed.add_field(name="**Description**", value=f"```{str(self.description)}```", inline=False)
+        await channel.send(embed=embed)
+        await interaction.response.send_message("Bug report received. Thank you!", ephemeral=True)
 
 
-@bot.command()
-async def sync(ctx: commands.Context) -> None:
-    synced = await bot.tree.sync()
-    await ctx.reply("Synced {} commands".format(len(synced)))
+class UserReportModal(discord.ui.Modal, title="Report a user"):
+    report_channel = discord.ui.TextInput(
+        label="In which channel that happened?",
+        placeholder='channel name',
+        required=True,
+        style=discord.TextStyle.short,
+        max_length=20
+    )
+    description = discord.ui.TextInput(
+        label="What happened?",
+        placeholder="describe what happened...",
+        required=True,
+        style=discord.TextStyle.long,
+        max_length=250
+    )
+    name = discord.ui.TextInput(
+        label="Who did that?",
+        placeholder=" name or discord nickname...",
+        required=True,
+        style=discord.TextStyle.short,
+        max_length=25
+    )
+
+    async def on_submit(self, interaction: discord.Interaction):
+        channel = await bot.fetch_channel(config.USER_REPORT_CHANNEL_ID)
+        embed = discord.Embed(
+            title=f"***User Reported***",
+            description=f"Report by {interaction.user.nick}",
+            color=discord.Color.red()
+        )
+        embed.add_field(name="**Where the violation occured:**", value=f"```{str(self.report_channel)}```",
+                        inline=False)
+        embed.add_field(name="**Description**", value=f"```{str(self.description)}```", inline=False)
+        embed.add_field(name="**User reported:**", value=f"```{str(self.name)}```", inline=False)
+        await channel.send(embed=embed)
+        await interaction.response.send_message("User report received. Thank you!", ephemeral=True)
+
+
+class ReportView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    @discord.ui.button(label="Report a Bug", style=discord.ButtonStyle.primary, custom_id="bugreportbtn")
+    async def report_bug_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.send_modal(BugReportModal())
+
+    @discord.ui.button(label="Report a User", style=discord.ButtonStyle.danger, custom_id="reportbtn")
+    async def report_user_button(self, interaction: discord.Interaction, button: discord.ui.Button):
+        await interaction.response.send_modal(UserReportModal())
 
 
 # bot startup
