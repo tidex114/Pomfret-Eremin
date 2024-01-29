@@ -1,7 +1,7 @@
 # Pomfret-Eremin
 **This is my worklog!****
 
-_Week 1:_
+_Week 2:_
 - **Transfered to registration by ID from the table in gspread**
   To login as a student or a faculty member, user should type in only the ID he was given. All the info such as first and last name, gmail and graduation year are stored in a gspread table and is taken from there.
   
@@ -17,7 +17,7 @@ _Week 1:_
   
 **TOTAL HOURS: 8**
 
-_Week 2:_
+_Week 3:_
 - **Created and conducted the Discord Poll**
   In total got 47 responses, inlcuding both faculty and students.
   - Almost half (22 - 46.8%) of the survey respondents answered that they do not use Discord. Among those who use it (25 - 53.2%), almost half (21 - 44.7%) use      Discord exclusively for gaming, 18 people (38.3%) for communication, and 4 for various purposes (8.4%).
@@ -31,7 +31,7 @@ _Week 2:_
 **TOTAL HOURS: 5**
 
 
-_Week 3:_
+_Week 4:_
 - **Strated working on message filtering system**
 
      _Filters done and working:_
@@ -57,7 +57,7 @@ _Week 3:_
 **TOTAL HOURS: 4**
 
 
-_Week 4:_
+_Week 5:_
 - **Created feedback system**
   - _Report user or bug:_
       Now, anyone can report a user or a bug in the #feedback channel. On the button interaction a form pops up and after being filled in, a message is sent to the _#user-reports_ or _#bug-reports_ channel. Any faculty members and moderators can access these and solve the problem   
