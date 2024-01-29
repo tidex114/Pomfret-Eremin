@@ -73,7 +73,7 @@ _Week 5:_
 
 
 -  **Link filter done and working**
-  -   on_message() checks every message using url_check from filters.py. If a url found, message containing it is deleted and the user who sent it gets a formal message from griffy, reminding him about the guidelines.
-  -   somme roles have the privelegy for sending links (Bot, Test Bot, Faculty, Administrator, Developer)
+    -   on_message() checks every message using url_check from filters.py. If a url found, message containing it is deleted and the user who sent it gets a formal message from griffy, reminding him about the guidelines.
+    -   somme roles have the privelegy for sending links (Bot, Test Bot, Faculty, Administrator, Developer)
 
 **TOTAL HOURS: 8**
