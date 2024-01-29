@@ -70,5 +70,10 @@ _Week 5:_
 
 - **Now /warn "username" works**
   - After a long troubleshooting, /warn now works. On each new warning user gets a formal text direct message from Griffy notificating him about the infraction.    
- 
-**TOTAL HOURS: 7**
+
+
+-  **Link filter done and working**
+  - on_message() checks every message using url_check from filters.py. If a url found, message containing it is deleted and the user who sent it gets a formal message from griffy, reminding him about the guidelines.
+  - Some roles have the privelegy for sending links (Bot, Test Bot, Faculty, Administrator, Developer)
+
+**TOTAL HOURS: 8**
