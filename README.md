@@ -77,3 +77,14 @@ _Week 5:_
     -   somme roles have the privelegy for sending links (Bot, Test Bot, Faculty, Administrator, Developer)
 
 **TOTAL HOURS: 8**
+
+_Week 6:_
+- **Google forms here!**
+  - _Google form is copied from a sample:_
+      During the sign-up creation process a google form is created from a sample form on my Google Drive. The title and description are changed according to the modal input information. It took a looooot time researching how to create and manage one using GoogleCloud and its API capabilities. Today, finally, got some progress after having an interesting conversation with [GPT](https://chat.openai.com/share/bc36e7ba-d9a1-4cf8-a85a-001dbd9bf3b1).
+
+      By far, copying the existing file and changing its name only is completed. One more hard part is ahead: getting the responses and placing them at the same table for signups from discord...
+- **Other changes:**
+  - Discord's modal has a desperate limit of only 5 fields to fill in... Unfortunatelly, it can not be changed by formatting the _discord.py_ library, though all the functionality from the discord's side exists. Here is some [explanation](https://github.com/discord/discord-api-docs/discussions/5963). As a result, when I added _description_ field all the code started spamming me with errors as it was the sixth field in the modal. I decided to remove the _waitlist_ field from it as it is not really necessary and is on at all times. Thus, I had to remove all the _waitlist_ fields through out my code and replace them with the _description_ one. Had to reformat _sample sheet_ and _trip list_ in my gspread table for the same reason.
+
+**TOTAL HOURS: 9.5**
