@@ -36,10 +36,10 @@ async def on_ready():
     print(cyan + f"Bot {bot.user.name} is ready for use!")
     debugging_channel = bot.get_channel(config.DEBUGGING_CHANNEL_ID)
 
-    trips, dates, times, atendees, wl, wks_ids, counts = gspread_signup.get_signups()
+    trips, dates, times, atendees, wks_ids, counts, descriptions = gspread_signup.get_signups()
 
     for i in range(len(trips)):
-        bot.add_view(SignUpButtons(trips[i], dates[i], times[i], atendees[i], wl[i], int(counts[i])))
+        bot.add_view(SignUpButtons(trips[i], dates[i], times[i], atendees[i], int(counts[i]), descriptions[i]))
     bot.add_view(RegisterButton())
     bot.add_view(ReportView())
     await debugging_channel.send("Bot is started and online!")
@@ -293,12 +293,12 @@ class SignupModal(discord.ui.Modal, title='New sign-up'):
         style=discord.TextStyle.short,
         max_length=3
     )
-    waitlist_input = discord.ui.TextInput(
-        label='Waitlist',
-        placeholder='True/False',
+    description_input = discord.ui.TextInput(
+        label='Description',
+        placeholder='info about the signup',
         required=True,
-        style=discord.TextStyle.short,
-        max_length=5
+        style=discord.TextStyle.long,
+        max_length=150
     )
 
     async def on_submit(self, interaction: discord.Interaction):
@@ -306,34 +306,37 @@ class SignupModal(discord.ui.Modal, title='New sign-up'):
                                                                  f"**Date:** {str(self.date_input)}\n"
                                                                  f"**Time:** {str(self.time_input)}\n"
                                                                  f"**Max Attendees:** {str(self.max_attendees_input)}\n"
-                                                                 f"**Waitlist Enabled:** {str(self.waitlist_input)}\n",
+                                                                 f"**Description:** {str(self.description_input)}\n",
                               color=discord.Color.blue())
+
         gspread_signup.newsignup(str(self.name_input), str(self.date_input), str(self.time_input),
-                                 int(str(self.max_attendees_input)), bool(self.waitlist_input))
+                                 int(str(self.max_attendees_input)),
+                                 str(self.description_input))
+
         channel = bot.get_channel(config.SIGN_UPS_ID)
         await channel.send(f"***Current count:*** 0/{self.max_attendees_input}", embed=embed,
                            view=SignUpButtons(str(self.name_input), str(self.date_input), str(self.time_input),
-                                              int(str(self.max_attendees_input)), bool(self.waitlist_input), 0))
+                                              int(str(self.max_attendees_input)), 0,
+                                              str(self.description_input)))
         await interaction.response.send_message("Sign-up created!", ephemeral=True)
 
 
 class SignUpButtons(discord.ui.View):
-    def __init__(self, event_name, event_date, event_time, max_attendees, waitlist_enabled, count):
+    def __init__(self, event_name, event_date, event_time, max_attendees, count, description):
         super().__init__(timeout=None)  # timeout of the view must be set to None
         self.event_name = event_name
         self.event_date = event_date
         self.event_time = event_time
         self.max_attendees = max_attendees
-        self.waitlist_enabled = waitlist_enabled
         self.count = count
+        self.description = description
 
     @discord.ui.button(label="+", style=discord.ButtonStyle.green, custom_id="+btn")
     async def greenBtn(self, interaction: discord.Interaction, button: discord.ui.Button):
         nickname = interaction.user.display_name.split()
         print(nickname)
         eph_msg = gspread_signup.adduser(nickname[0], nickname[1], int(nickname[2][:-1]), self.event_name,
-                                         int(self.max_attendees),
-                                         self.waitlist_enabled)
+                                         int(self.max_attendees))
         if eph_msg == "You were added to the list!":
             gspread_signup.change_count(self.event_name, 1)
             self.count += 1
